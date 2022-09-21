@@ -8,6 +8,7 @@ and maybe an sms system for notifying if the lawn is over due for watering and i
 find me at tmntnpizza at reddit if you want to get into conact with me. please let me know if you see or create a code ethat may help me to complete this project!
 
 #Irrigation Station1.3
+
 Added an auto refresh for the http (currently every 7secs for testing). 
 Added a timer function activated by the http toggle button (shuts off in 6secs for testing). 
 
