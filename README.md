@@ -13,6 +13,9 @@ Added a timer function activated by the http toggle button (shuts off in 6secs f
 
 Issues/discoveries: 
 - I have many sets of my 8 relays each being listed and I'm sure there is a way to compress the code.
--the timer function currently shuts off all relays at 6secs from the first relay activation (not an issue for my setup).
--http closes on OSerror when more then 4 of my 8 timer functions are applied to my code, whether or not they are being used.
--Have to recycle Pico power when the code is interrupted in any way before you can reconnect to the server.
+
+- The timer function currently shuts off all relays at 6secs from the first relay activation (not an issue for my setup).
+
+- Http closes on OSerror when more then 4 of my 8 timer functions are applied to my code, whether or not they are being used.
+
+- Have to recycle Pico power when the code is interrupted in any way before you can reconnect to the server.
