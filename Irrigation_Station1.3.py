@@ -12,19 +12,20 @@ from picozero import pico_temp_sensor, pico_led
 from utime import sleep
 from time import sleep
 
-relays_one = Pin(21, Pin.OUT)
-relays_two = Pin(20, Pin.OUT)
-relays_three = Pin(19, Pin.OUT)
-relays_four = Pin(18, Pin.OUT)
-relays_five = Pin(17, Pin.OUT)
-relays_six = Pin(16, Pin.OUT)
-relays_seven = Pin(15, Pin.OUT) 
-relays_eight = Pin(14, Pin.OUT)
+#Create an empty array
+relays = list()
 
+#List comprehension to create an array of sequential pins
+#Same as [14,15...21]
+relayPins = [x for x  in range (14, 22)]
 led_on_board = Pin("LED", Pin.OUT)
 led_rgb = Pin(13, Pin.OUT)
 buz = Pin(6, Pin.OUT)
 
+#Initialise the pins
+for x in relayPins:
+    relays.append(Pin(x, Pin.OUT)
+    
 #change to your country code as applicable
 rp2.country('CA')
 
@@ -39,14 +40,6 @@ pw  = secrets["pw"]
 def Website():
     led_one = led_on_board.value()
     led_two = led_rgb.value()
-    relay_one = relays_one.value()
-    relay_two = relays_two.value()
-    relay_three = relays_three.value()
-    relay_four = relays_four.value()
-    relay_five = relays_five.value()
-    relay_six = relays_six.value()
-    relay_seven = relays_seven.value()
-    relay_eight = relays_eight.value()
     
     website = """<!DOCTYPE html>
     <html>
@@ -77,42 +70,42 @@ def Website():
                   <tr>
                     <td><center>one </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("one")'/> </center></td>
-                    <td> <center>  <span id="relay_one">""" + str(relay_one) + """</span></center> </td>
+                    <td> <center>  <span id="relay_one">""" + str(relays[0].value) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>two </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("two")'/> </center></td>
-                    <td> <center>  <span id="relay_two">""" + str(relay_two) + """</span></center> </td>
+                    <td> <center>  <span id="relay_two">""" + str(relays[1].value) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>three </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("three")'/> </center></td>
-                    <td> <center>  <span id="relay_three">""" + str(relay_three) + """</span></center> </td>
+                    <td> <center>  <span id="relay_three">""" + str(relays[2].value) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>four </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("four")'/> </center></td>
-                    <td> <center>  <span id="relay_four">""" + str(relay_four) + """</span></center> </td>
+                    <td> <center>  <span id="relay_four">""" + str(relays[3].value) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>five </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("five")'/> </center></td>
-                    <td> <center>  <span id="relay_five">""" + str(relay_five) + """</span></center> </td>
+                    <td> <center>  <span id="relay_five">""" + str(relays[4].value) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>six </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("six")'/> </center></td>
-                    <td> <center>  <span id="relay_six">""" + str(relay_six) + """</span></center> </td>
+                    <td> <center>  <span id="relay_six">""" + str(relays[5].value) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>seven </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("Seven")'/> </center></td>
-                    <td> <center>  <span id="relay_seven">""" + str(relay_seven) + """</span></center> </td>
+                    <td> <center>  <span id="relay_seven">""" + str(relays[6].value) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>eight </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("eight")'/> </center></td>
-                    <td> <center>  <span id="relay_eight">""" + str(relay_eight) + """</span></center> </td>
+                    <td> <center>  <span id="relay_eight">""" + str(relays[7].value) + """</span></center> </td>
                   </tr>
             </table>
             
@@ -196,23 +189,12 @@ else:
     print('ip = ' + status[0])
     led_on_board.on()
 
-def cb_relays_oneoff(tim):
-    relays_one.value(0)
-def cb_relays_twooff(tim):
-    relays_two.value(0)
-def cb_relays_threeoff(tim):
-    relays_three.value(0)
-def cb_relays_fouroff(tim):
-    relays_four.value(0)
-def cb_relays_fiveoff(tim):
-    relays_five.value(0)
-def cb_relays_sixoff(tim):
-    relays_six.value(0)
-def cb_relays_sevenoff(tim):
-    relays_seven.value(0)
-def cb_relays_eightoff(tim):
-    relays_eight.value(0)
 
+#This can replace all of the above and allow you to turn them back on too
+def SetRelayStatus(relay_number, status):
+    relays[relay_number].value(status)
+                      
+                      
 ipAddress = status[0]
 addr = socket.getaddrinfo('0.0.0.0', 80)[0][-1]
 s = socket.socket()
@@ -225,8 +207,9 @@ while True:
         request = cl.recv(1024)
         request = str(request)
         
-        relays_one_Timer = Timer(period=6000, mode=Timer.ONE_SHOT, callback=cb_relays_oneoff)
-        relays_two_Timer = Timer(period=6000, mode=Timer.ONE_SHOT, callback=cb_relays_twooff)
+        #Replace the callbacks with SetRelay
+        relays_one_Timer = Timer(period=6000, mode=Timer.ONE_SHOT, callback=SetRelayStatus(0,0))
+        relays_two_Timer = Timer(period=6000, mode=Timer.ONE_SHOT, callback=SetRelayStatus(1,0))
 #        relays_three_Timer = Timer(period=6000, mode=Timer.ONE_SHOT, callback=cb_relays_threeoff)
 #        relays_four_Timer = Timer(period=6000, mode=Timer.ONE_SHOT, callback=cb_relays_fouroff)
 #        relays_five_Timer = Timer(period=6000, mode=Timer.ONE_SHOT, callback=cb_relays_fiveoff)
@@ -240,29 +223,31 @@ while True:
         if request.find('/led/two') == 6:
             led_rgb.toggle()
         
+        #Not familiar enough with requests to suggest how it might be trimmed
+
         if request.find('/relays/one') == 6:
-            relays_one.toggle()
+            relays[0].toggle()
             
         if request.find('/relays/two') == 6:
-            relays_two.toggle()
+            relays[1].toggle()
             
         if request.find('/relays/three') == 6:
-            relays_three.toggle()
+            relays[2].toggle()
             
         if request.find('/relays/four') == 6:
-            relays_four.toggle()
+            relays[3].toggle()
         
         if request.find('/relays/five') == 6:
-            relays_five.toggle()
+            relays[4].toggle()
             
         if request.find('/relays/six') == 6:
-            relays_six.toggle()
+            relays[5].toggle()
             
         if request.find('/relays/seven') == 6:
-            relays_seven.toggle()
+            relays[6].toggle()
             
         if request.find('/relays/eight') == 6:
-            relays_eight.toggle()
+            relays[7].toggle()
             
         cl.send('HTTP/1.0 200 OK\r\nContent-type: text/html\r\n\r\n')
         cl.send(Website())
@@ -276,13 +261,9 @@ while True:
         # turn the relay off
         led_on_board.value(0)
         led_rgb.value(0)
-        relays_one.value(0)
-        relays_two.value(0)
-        relays_three.value(0)
-        relays_four.value(0)
-        relays_five.value(0)
-        relays_six.value(0)
-        relays_seven.value(0)
-        relays_eight.value(0)
+        #Unsure if x will return the pin object or a number
+        #for x in range(8) if it returns the object or change SetRelayStatus to be simply relay_number.value(status)
+        for x in relays:
+            SetRelayStatus(x, 0)
         print("\nExiting application\n")
         machine.reset
