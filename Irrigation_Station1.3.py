@@ -22,10 +22,9 @@ led_on_board = Pin("LED", Pin.OUT)
 led_rgb = Pin(13, Pin.OUT)
 buz = Pin(6, Pin.OUT)
 
-#Function to initialise the pins
-def InitPins:
-    for x in relayPins:
-        relays.append(Pin(x, Pin.OUT)
+#Initialise the pins
+for x in relayPins:
+    relays.append(Pin(x, Pin.OUT)
     
 #change to your country code as applicable
 rp2.country('CA')
@@ -190,23 +189,6 @@ else:
     print('ip = ' + status[0])
     led_on_board.on()
 
-#Not sure what tim is              
-def cb_relays_oneoff(tim):
-    relays_one.value(0)
-def cb_relays_twooff(tim):
-    relays_two.value(0)
-def cb_relays_threeoff(tim):
-    relays_three.value(0)
-def cb_relays_fouroff(tim):
-    relays_four.value(0)
-def cb_relays_fiveoff(tim):
-    relays_five.value(0)
-def cb_relays_sixoff(tim):
-    relays_six.value(0)
-def cb_relays_sevenoff(tim):
-    relays_seven.value(0)
-def cb_relays_eightoff(tim):
-    relays_eight.value(0)
 
 #This can replace all of the above and allow you to turn them back on too
 def SetRelayStatus(relay_number, status):
@@ -277,13 +259,9 @@ while True:
         # turn the relay off
         led_on_board.value(0)
         led_rgb.value(0)
-        relays_one.value(0)
-        relays_two.value(0)
-        relays_three.value(0)
-        relays_four.value(0)
-        relays_five.value(0)
-        relays_six.value(0)
-        relays_seven.value(0)
-        relays_eight.value(0)
+        #Unsure if x will return the pin object or a number
+        #for x in range(8) if it returns the object or change SetRelayStatus to be simply relay_number.value(status)
+        for x in relays:
+            SetRelayStatus(x, 0)
         print("\nExiting application\n")
         machine.reset
