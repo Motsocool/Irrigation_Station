@@ -12,19 +12,21 @@ from picozero import pico_temp_sensor, pico_led
 from utime import sleep
 from time import sleep
 
-relays_one = Pin(21, Pin.OUT)
-relays_two = Pin(20, Pin.OUT)
-relays_three = Pin(19, Pin.OUT)
-relays_four = Pin(18, Pin.OUT)
-relays_five = Pin(17, Pin.OUT)
-relays_six = Pin(16, Pin.OUT)
-relays_seven = Pin(15, Pin.OUT) 
-relays_eight = Pin(14, Pin.OUT)
+#Create an empty array
+relays = list()
 
+#List comprehension to create an array of sequential pins
+#Same as [14,15...21]
+relayPins = [x for x  in range (14, 22)]
 led_on_board = Pin("LED", Pin.OUT)
 led_rgb = Pin(13, Pin.OUT)
 buz = Pin(6, Pin.OUT)
 
+#Function to initialise the pins
+def InitPins:
+    for x in relayPins:
+        relays.append(Pin(x, Pin.OUT)
+    
 #change to your country code as applicable
 rp2.country('CA')
 
@@ -39,14 +41,6 @@ pw  = secrets["pw"]
 def Website():
     led_one = led_on_board.value()
     led_two = led_rgb.value()
-    relay_one = relays_one.value()
-    relay_two = relays_two.value()
-    relay_three = relays_three.value()
-    relay_four = relays_four.value()
-    relay_five = relays_five.value()
-    relay_six = relays_six.value()
-    relay_seven = relays_seven.value()
-    relay_eight = relays_eight.value()
     
     website = """<!DOCTYPE html>
     <html>
@@ -77,42 +71,42 @@ def Website():
                   <tr>
                     <td><center>one </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("one")'/> </center></td>
-                    <td> <center>  <span id="relay_one">""" + str(relay_one) + """</span></center> </td>
+                    <td> <center>  <span id="relay_one">""" + str(relays[0]) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>two </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("two")'/> </center></td>
-                    <td> <center>  <span id="relay_two">""" + str(relay_two) + """</span></center> </td>
+                    <td> <center>  <span id="relay_two">""" + str(relays[1]) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>three </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("three")'/> </center></td>
-                    <td> <center>  <span id="relay_three">""" + str(relay_three) + """</span></center> </td>
+                    <td> <center>  <span id="relay_three">""" + str(relays[2]) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>four </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("four")'/> </center></td>
-                    <td> <center>  <span id="relay_four">""" + str(relay_four) + """</span></center> </td>
+                    <td> <center>  <span id="relay_four">""" + str(relays[3]) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>five </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("five")'/> </center></td>
-                    <td> <center>  <span id="relay_five">""" + str(relay_five) + """</span></center> </td>
+                    <td> <center>  <span id="relay_five">""" + str(relays[4]) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>six </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("six")'/> </center></td>
-                    <td> <center>  <span id="relay_six">""" + str(relay_six) + """</span></center> </td>
+                    <td> <center>  <span id="relay_six">""" + str(relays[5]) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>seven </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("Seven")'/> </center></td>
-                    <td> <center>  <span id="relay_seven">""" + str(relay_seven) + """</span></center> </td>
+                    <td> <center>  <span id="relay_seven">""" + str(relays[6]) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>eight </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("eight")'/> </center></td>
-                    <td> <center>  <span id="relay_eight">""" + str(relay_eight) + """</span></center> </td>
+                    <td> <center>  <span id="relay_eight">""" + str(relays[7]) + """</span></center> </td>
                   </tr>
             </table>
             
@@ -196,6 +190,7 @@ else:
     print('ip = ' + status[0])
     led_on_board.on()
 
+#Not sure what tim is              
 def cb_relays_oneoff(tim):
     relays_one.value(0)
 def cb_relays_twooff(tim):
@@ -213,6 +208,11 @@ def cb_relays_sevenoff(tim):
 def cb_relays_eightoff(tim):
     relays_eight.value(0)
 
+#This can replace all of the above and allow you to turn them back on too
+def SetRelayStatus(relay_number, status):
+    relays[relay_number].value(status)
+                      
+                      
 ipAddress = status[0]
 addr = socket.getaddrinfo('0.0.0.0', 80)[0][-1]
 s = socket.socket()
@@ -225,6 +225,7 @@ while True:
         request = cl.recv(1024)
         request = str(request)
         
+        #Replace the callbacks with SetRelay
         relays_one_Timer = Timer(period=6000, mode=Timer.ONE_SHOT, callback=cb_relays_oneoff)
         relays_two_Timer = Timer(period=6000, mode=Timer.ONE_SHOT, callback=cb_relays_twooff)
 #        relays_three_Timer = Timer(period=6000, mode=Timer.ONE_SHOT, callback=cb_relays_threeoff)
