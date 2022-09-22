@@ -70,42 +70,42 @@ def Website():
                   <tr>
                     <td><center>one </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("one")'/> </center></td>
-                    <td> <center>  <span id="relay_one">""" + str(relays[0]) + """</span></center> </td>
+                    <td> <center>  <span id="relay_one">""" + str(relays[0].value) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>two </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("two")'/> </center></td>
-                    <td> <center>  <span id="relay_two">""" + str(relays[1]) + """</span></center> </td>
+                    <td> <center>  <span id="relay_two">""" + str(relays[1].value) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>three </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("three")'/> </center></td>
-                    <td> <center>  <span id="relay_three">""" + str(relays[2]) + """</span></center> </td>
+                    <td> <center>  <span id="relay_three">""" + str(relays[2].value) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>four </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("four")'/> </center></td>
-                    <td> <center>  <span id="relay_four">""" + str(relays[3]) + """</span></center> </td>
+                    <td> <center>  <span id="relay_four">""" + str(relays[3].value) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>five </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("five")'/> </center></td>
-                    <td> <center>  <span id="relay_five">""" + str(relays[4]) + """</span></center> </td>
+                    <td> <center>  <span id="relay_five">""" + str(relays[4].value) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>six </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("six")'/> </center></td>
-                    <td> <center>  <span id="relay_six">""" + str(relays[5]) + """</span></center> </td>
+                    <td> <center>  <span id="relay_six">""" + str(relays[5].value) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>seven </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("Seven")'/> </center></td>
-                    <td> <center>  <span id="relay_seven">""" + str(relays[6]) + """</span></center> </td>
+                    <td> <center>  <span id="relay_seven">""" + str(relays[6].value) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>eight </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("eight")'/> </center></td>
-                    <td> <center>  <span id="relay_eight">""" + str(relays[7]) + """</span></center> </td>
+                    <td> <center>  <span id="relay_eight">""" + str(relays[7].value) + """</span></center> </td>
                   </tr>
             </table>
             
@@ -208,8 +208,8 @@ while True:
         request = str(request)
         
         #Replace the callbacks with SetRelay
-        relays_one_Timer = Timer(period=6000, mode=Timer.ONE_SHOT, callback=cb_relays_oneoff)
-        relays_two_Timer = Timer(period=6000, mode=Timer.ONE_SHOT, callback=cb_relays_twooff)
+        relays_one_Timer = Timer(period=6000, mode=Timer.ONE_SHOT, callback=SetRelayStatus(0,0))
+        relays_two_Timer = Timer(period=6000, mode=Timer.ONE_SHOT, callback=SetRelayStatus(1,0))
 #        relays_three_Timer = Timer(period=6000, mode=Timer.ONE_SHOT, callback=cb_relays_threeoff)
 #        relays_four_Timer = Timer(period=6000, mode=Timer.ONE_SHOT, callback=cb_relays_fouroff)
 #        relays_five_Timer = Timer(period=6000, mode=Timer.ONE_SHOT, callback=cb_relays_fiveoff)
@@ -223,29 +223,31 @@ while True:
         if request.find('/led/two') == 6:
             led_rgb.toggle()
         
+        #Not familiar enough with requests to suggest how it might be trimmed
+
         if request.find('/relays/one') == 6:
-            relays_one.toggle()
+            relays[0].toggle()
             
         if request.find('/relays/two') == 6:
-            relays_two.toggle()
+            relays[1].toggle()
             
         if request.find('/relays/three') == 6:
-            relays_three.toggle()
+            relays[2].toggle()
             
         if request.find('/relays/four') == 6:
-            relays_four.toggle()
+            relays[3].toggle()
         
         if request.find('/relays/five') == 6:
-            relays_five.toggle()
+            relays[4].toggle()
             
         if request.find('/relays/six') == 6:
-            relays_six.toggle()
+            relays[5].toggle()
             
         if request.find('/relays/seven') == 6:
-            relays_seven.toggle()
+            relays[6].toggle()
             
         if request.find('/relays/eight') == 6:
-            relays_eight.toggle()
+            relays[7].toggle()
             
         cl.send('HTTP/1.0 200 OK\r\nContent-type: text/html\r\n\r\n')
         cl.send(Website())
