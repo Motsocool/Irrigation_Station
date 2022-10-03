@@ -13,10 +13,13 @@ Added an auto refresh for the http (currently every 7secs for testing).
 Added a timer function activated by the http toggle button (shuts off in 6secs for testing). 
 
 Issues/discoveries: 
-- I have many sets of my 8 relays each being listed and I'm sure there is a way to compress the code.
+- I have many sets of my 8 relays each being listed and I'm sure there is a way to compress the code. (Still a minor issue)
 
-- The timer function currently shuts off all relays at 6secs from the first relay activation (not an issue for my setup).
+- The timer function currently shuts off all relays at 6secs from the first relay activation (not an issue for my setup). (SOLVED!)
 
-- Http closes on OSerror when more then 4 of my 8 timer functions are applied to my code, whether or not they are being used.
+- Http closes on OSerror when more then 4 of my 8 timer functions are applied to my code, whether or not they are being used. (SOLVED!)
 
-- Have to recycle Pico power when the code is interrupted in any way before you can reconnect to the server.
+- Have to recycle Pico power when the code is interrupted in any way before you can reconnect to the server. (SOLVED!)
+
+
+Refer to the most up to date version (Currently 1.3.3) for the least bugs. I'll leave the history of my progress for if you have a similar situation and would like to refer to my codes.
