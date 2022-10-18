@@ -12,115 +12,110 @@ from picozero import pico_temp_sensor, pico_led
 from utime import sleep
 from time import sleep
 
-pins = []
+relays = []
 for p in range(21, 13, -1):
-    pins.append(Pin((p), Pin.OUT))
+    relays.append(Pin((p), Pin.OUT))
 
 led_on_board = Pin("LED", Pin.OUT)
 led_rgb = Pin(13, Pin.OUT)
 buz = Pin(6, Pin.OUT)
 
-relays_one_timer = Timer()
-relays_two_timer = Timer()
-relays_three_timer = Timer()
-relays_four_timer = Timer()
-relays_five_timer = Timer()
-relays_six_timer = Timer()
-relays_seven_timer = Timer()
-relays_eight_timer = Timer()
+timer = []
+for t in range(0, 8, 1):
+     timer.append(Timer())
 
 def relays_1():
-    pins[0].toggle()
-    relays_one_timer.init(period=timer_usec, mode=Timer.ONE_SHOT, callback=cb_relays_oneoff)
+    relays[0].toggle()
+    timer[0].init(period=timer_usec, mode=Timer.ONE_SHOT, callback=cb_relays_oneoff)
     print('Relay 1 on')
 
 def relays_2():
-    pins[1].toggle()
-    relays_two_timer.init(period=timer_usec, mode=Timer.ONE_SHOT, callback=cb_relays_twooff)
+    relays[1].toggle()
+    timer[1].init(period=timer_usec, mode=Timer.ONE_SHOT, callback=cb_relays_twooff)
     print('Relay 2 on')
     
 def relays_3():
-    pins[2].toggle()
-    relays_three_timer.init(period=timer_usec, mode=Timer.ONE_SHOT, callback=cb_relays_threeoff)
+    relays[2].toggle()
+    timer[2].init(period=timer_usec, mode=Timer.ONE_SHOT, callback=cb_relays_threeoff)
     print('Relay 3 on')
     
 def relays_4():
-    pins[3].toggle()
-    relays_four_timer.init(period=timer_usec, mode=Timer.ONE_SHOT, callback=cb_relays_fouroff)
+    relays[3].toggle()
+    timer[3].init(period=timer_usec, mode=Timer.ONE_SHOT, callback=cb_relays_fouroff)
     print('Relay 4 on')
     
 def relays_5():
-    pins[4].toggle()
-    relays_five_timer.init(period=timer_usec, mode=Timer.ONE_SHOT, callback=cb_relays_fiveoff)
+    relays[4].toggle()
+    timer[4].init(period=timer_usec, mode=Timer.ONE_SHOT, callback=cb_relays_fiveoff)
     print('Relay 5 on')
     
 def relays_6():
-    pins[5].toggle()
-    relays_six_timer.init(period=timer_usec, mode=Timer.ONE_SHOT, callback=cb_relays_sixoff)
+    relays[5].toggle()
+    timer[5].init(period=timer_usec, mode=Timer.ONE_SHOT, callback=cb_relays_sixoff)
     print('Relay 6 on')
     
 def relays_7():
-    pins[6].toggle()
-    relays_seven_timer.init(period=timer_usec, mode=Timer.ONE_SHOT, callback=cb_relays_sevenoff)
+    relays[6].toggle()
+    timer[6].init(period=timer_usec, mode=Timer.ONE_SHOT, callback=cb_relays_sevenoff)
     print('Relay 7 on')
     
 def relays_8():
-    pins[7].toggle()
-    relays_eight_timer.init(period=timer_usec, mode=Timer.ONE_SHOT, callback=cb_relays_eightoff)
+    relays[7].toggle()
+    timer[7].init(period=timer_usec, mode=Timer.ONE_SHOT, callback=cb_relays_eightoff)
     print('Relay 8 on')
     
 def cb_relays_oneoff(Source):
-    pins[0].value(0)
+    relays[0].value(0)
     print('Relay 1 off cb')
     
 def cb_relays_twooff(Source):
-    pins[1].value(0)
+    relays[1].value(0)
     print('Relay 2 off cb')
     
 def cb_relays_threeoff(Source):
-    pins[2].value(0)
+    relays[2].value(0)
     print('Relay 3 off cb')
     
 def cb_relays_fouroff(Source):
-    pins[3].value(0)
+    relays[3].value(0)
     print('Relay 4 off cb')
     
 def cb_relays_fiveoff(Source):
-    pins[4].value(0)
+    relays[4].value(0)
     print('Relay 5 off cb')
     
 def cb_relays_sixoff(Source):
-    pins[5].value(0)
+    relays[5].value(0)
     print('Relay 6 off cb')
     
 def cb_relays_sevenoff(Source):
-    pins[6].value(0)
+    relays[6].value(0)
     print('Relay 7 off cb')
     
 def cb_relays_eightoff(Source):
-    pins[7].value(0)
+    relays[7].value(0)
     print('Relay 8 off cb')
     
 def cb_relays_alloff(Source):
+    relays[0].value(0)
+    relays[1].value(0)
+    relays[2].value(0)
+    relays[3].value(0)
+    relays[4].value(0)
+    relays[5].value(0)
+    relays[6].value(0)
+    relays[7].value(0)
     print('All Relays Are Off')
-    pins[0].value(0)
-    pins[1].value(0)
-    pins[2].value(0)
-    pins[3].value(0)
-    pins[4].value(0)
-    pins[5].value(0)
-    pins[6].value(0)
-    pins[7].value(0)
-    
-def water_on_time():
-    if request.method == 'POST':
-        water_on_time = request.form['water_on_time']
-        print(water_on_time)
     
 water_on_time = 0 #In mins with the convertion. 60000*desired mins = the value water_on_time needs to be.
 timer_usec = water_on_time*60000 #timer function requires microsecs and I convert them to mins. 900000usecs = 15mins
 water_pause = water_on_time+0.167 #In mins with the convertion. 60*desired mins = the value water_pause needs to be.
 sleep_msec = water_pause*60 #sleep function requires millisecs and I convert them to mins. 900msecs = 15mins
+
+def water_on_time():
+    if request.method == 'POST':
+        water_on_time = request.form['water_on_time']
+        print(water_on_time)
 
 def relays_all():
     relays_1()
@@ -154,15 +149,6 @@ pw  = secrets["pw"]
 def Website():
     led_one = led_on_board.value()
     led_two = led_rgb.value()
-    relay_one = pins[0].value()
-    relay_two = pins[1].value()
-    relay_three = pins[2].value()
-    relay_four = pins[3].value()
-    relay_five = pins[4].value()
-    relay_six = pins[5].value()
-    relay_seven = pins[6].value()
-    relay_eight = pins[7].value()
-    relay_all = relays_all
 
         #not my original work, but modified
     website = """<!DOCTYPE html>
@@ -194,47 +180,47 @@ def Website():
                   <tr>
                     <td><center>one </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("one")'/> </center></td>
-                    <td> <center>  <span id="relay_one">""" + str(relay_one) + """</span></center> </td>
+                    <td> <center>  <span id="relay_one">""" + str(relays[0].value()) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>two </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("two")'/> </center></td>
-                    <td> <center>  <span id="relay_two">""" + str(relay_two) + """</span></center> </td>
+                    <td> <center>  <span id="relay_two">""" + str(relays[1].value()) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>three </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("three")'/> </center></td>
-                    <td> <center>  <span id="relay_three">""" + str(relay_three) + """</span></center> </td>
+                    <td> <center>  <span id="relay_three">""" + str(relays[2].value()) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>four </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("four")'/> </center></td>
-                    <td> <center>  <span id="relay_four">""" + str(relay_four) + """</span></center> </td>
+                    <td> <center>  <span id="relay_four">""" + str(relays[3].value()) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>five </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("five")'/> </center></td>
-                    <td> <center>  <span id="relay_five">""" + str(relay_five) + """</span></center> </td>
+                    <td> <center>  <span id="relay_five">""" + str(relays[4].value()) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>six </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("six")'/> </center></td>
-                    <td> <center>  <span id="relay_six">""" + str(relay_six) + """</span></center> </td>
+                    <td> <center>  <span id="relay_six">""" + str(relays[5].value()) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>seven </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("Seven")'/> </center></td>
-                    <td> <center>  <span id="relay_seven">""" + str(relay_seven) + """</span></center> </td>
+                    <td> <center>  <span id="relay_seven">""" + str(relays[6].value()) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>eight </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("eight")'/> </center></td>
-                    <td> <center>  <span id="relay_eight">""" + str(relay_eight) + """</span></center> </td>
+                    <td> <center>  <span id="relay_eight">""" + str(relays[7].value()) + """</span></center> </td>
                   </tr>
                   <tr>
                     <td><center>all </td>
                     <td><center><input type='button' value='toggle' onclick='toggleRelay("all")'/> </center></td>
-                    <td> <center>  <span id="All_Relays">""" + str(relay_all) + """</span></center> </td>
+                    <td> <center>  <span id="All_Relays">""" + str(relays_all) + """</span></center> </td>
                   </tr>
             </table>
             
