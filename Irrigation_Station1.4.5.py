@@ -32,7 +32,7 @@ def relays_all():
     relays_1()
     sleep(sleep_msec)        #this sleep has to be set higher then the timer period, unless you want the relays on at staggered times.
     relays_2()
-    sleep(sleep_msec)
+    sleep(sleep_msec) 
     relays_3()
     sleep(sleep_msec)
     relays_4()
